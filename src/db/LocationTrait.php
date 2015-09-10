@@ -10,6 +10,7 @@
 namespace jlorente\location\db;
 
 /**
+ * Trait to use in the model to be localized. 
  * 
  * @property Location $location The location of the user or null if not defined.
  * 
@@ -155,7 +156,8 @@ trait LocationTrait {
     }
 
     /**
-     * 
+     * Populates the fields in the Trait with the ones get from the stored 
+     * Location object.
      */
     public function populateLocationOwner() {
         $location = $this->location;

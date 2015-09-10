@@ -24,5 +24,12 @@ return [
     'Select region' => 'Selecciona una provincia',
     'City' => 'Ciudad',
     'Cities' => 'Ciudades',
-    'Select city' => 'Selecciona una ciudad'
+    'Select city' => 'Selecciona una ciudad',
+    'ID' => 'ID',
+    'Address' => 'Dirección',
+    'Postal Code' => 'Código Postal',
+    'Latitude' => 'Latitud',
+    'Longitude' => 'Longitud',
+    'Name' => 'Nombre',
+    'Country Code' => 'Código de País'
 ];

@@ -16,6 +16,7 @@ use Yii;
  *
  * @property integer $id
  * @property string $name
+ * @property string $code
  * 
  * @property Region[] $regions A collection of Region objects.
  * @property Location[] $locations A collection of Location objects.
@@ -36,8 +37,8 @@ class Country extends ActiveRecord {
      */
     public function rules() {
         return array_merge(parent::rules(), [
-            [['name'], 'required'],
-            [['name'], 'string', 'max' => 255]
+            [['name', 'code'], 'required'],
+            [['name', 'code'], 'string', 'max' => 255]
         ]);
     }
 
@@ -47,7 +48,8 @@ class Country extends ActiveRecord {
     public function attributeLabels() {
         return array_merge(parent::attributeLabels(), [
             'id' => Yii::t('jlorente/location', 'ID'),
-            'name' => Yii::t('jlorente/location', 'Name')
+            'name' => Yii::t('jlorente/location', 'Name'),
+            'code' => Yii::t('jlorente/location', 'Country Code')
         ]);
     }
 

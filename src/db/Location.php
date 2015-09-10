@@ -10,6 +10,8 @@
 namespace jlorente\location\db;
 
 use Yii;
+use jlorente\location\exceptions\SaveException;
+use jlorente\location\models\Coordinates;
 
 /**
  * This is the model class for table "jl_loc_location".
@@ -45,7 +47,7 @@ class Location extends yii\db\ActiveRecord {
         return [
             [['country_id', 'region_id', 'city_id'], 'integer'],
             [['latitude', 'longitude'], 'number'],
-            [['address'], 'string', 'max' => 255]
+            [['address', 'postal_code'], 'string', 'max' => 255]
         ];
     }
 
@@ -55,11 +57,11 @@ class Location extends yii\db\ActiveRecord {
     public function attributeLabels() {
         return [
             'id' => Yii::t('jlorente/location', 'ID'),
-            'country_id' => Yii::t('jlorente/location', 'Country ID'),
-            'zone_id' => Yii::t('jlorente/location', 'Zone ID'),
-            'region_id' => Yii::t('jlorente/location', 'Region ID'),
-            'place_id' => Yii::t('jlorente/location', 'Place ID'),
+            'country_id' => Yii::t('jlorente/location', 'Country'),
+            'region_id' => Yii::t('jlorente/location', 'Region'),
+            'city_id' => Yii::t('jlorente/location', 'City'),
             'address' => Yii::t('jlorente/location', 'Address'),
+            'postal_code' => Yii::t('jlorente/location', 'Postal Code'),
             'latitude' => Yii::t('jlorente/location', 'Latitude'),
             'longitude' => Yii::t('jlorente/location', 'Longitude'),
         ];
@@ -87,6 +89,49 @@ class Location extends yii\db\ActiveRecord {
      */
     public function getCountry() {
         return $this->hasOne(Country::className(), ['id' => 'country_id']);
+    }
+
+    /**
+     * 
+     * @throws SaveException
+     */
+    public function updateCoordinates() {
+        $address = '';
+        if (empty($this->address) === false) {
+            $matches = [];
+            preg_match('/[^\d]+[\d]*/ui', $this->address, $matches);
+            $address = $matches[0];
+        }
+        $locationString = $this->getLocationString();
+        $coordinates = new Coordinates([
+            'apiServerKey' => Yii::$app->params['googleApiServerKey']
+        ]);
+        if ($coordinates->populate($address . ' ' . $locationString, $this->country->code)) {
+            $coordinates->populate($locationString, $this->country->code);
+        }
+        $this->attributes = $coordinates->attributes;
+        if ($this->update(true, ['latitude', 'longitude']) === false) {
+            throw new SaveException($this);
+        }
+    }
+
+    /**
+     * Gets the string identifying the fixed part of the location.
+     * 
+     * @return string
+     */
+    public function getLocationString() {
+        $normalized = '';
+        if ($this->city !== null) {
+            $normalized .= $this->city->name;
+        }
+        if ($this->region !== null) {
+            $normalized .= ' ' . $this->region->name;
+        }
+        if ($this->postal_code !== null) {
+            $normalized .= ' ' . $this->postal_code;
+        }
+        return $normalized;
     }
 
 }

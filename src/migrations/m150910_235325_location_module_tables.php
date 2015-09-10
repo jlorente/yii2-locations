@@ -27,7 +27,8 @@ class m150910_235325_location_module_tables extends Migration {
     public function up() {
         $this->createTable($this->getCountryTableName(), [
             'id' => Schema::TYPE_PK,
-            'name' => Schema::TYPE_STRING,
+            'name' => Schema::TYPE_STRING . ' NOT NULL',
+            'code' => Schema::TYPE_STRING . ' NOT NULL',
             'created_at' => Schema::TYPE_INTEGER,
             'created_by' => Schema::TYPE_INTEGER,
             'updated_at' => Schema::TYPE_INTEGER,
@@ -35,8 +36,8 @@ class m150910_235325_location_module_tables extends Migration {
         ]);
         $this->createTable($this->getRegionTableName(), [
             'id' => Schema::TYPE_PK,
-            'country_id' => Schema::TYPE_INTEGER,
-            'name' => Schema::TYPE_STRING,
+            'country_id' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'name' => Schema::TYPE_STRING . ' NOT NULL',
             'created_at' => Schema::TYPE_INTEGER,
             'created_by' => Schema::TYPE_INTEGER,
             'updated_at' => Schema::TYPE_INTEGER,
@@ -47,8 +48,8 @@ class m150910_235325_location_module_tables extends Migration {
         );
         $this->createTable($this->getCityTableName(), [
             'id' => Schema::TYPE_PK,
-            'region_id' => Schema::TYPE_INTEGER,
-            'name' => Schema::TYPE_STRING,
+            'region_id' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'name' => Schema::TYPE_STRING . ' NOT NULL',
             'created_at' => Schema::TYPE_INTEGER,
             'created_by' => Schema::TYPE_INTEGER,
             'updated_at' => Schema::TYPE_INTEGER,
