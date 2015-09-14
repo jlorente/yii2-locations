@@ -1,5 +1,5 @@
 {
-    "name": "jose_lorente/yii2-locations",
+    "name": "jlorente/yii2-locations",
     "description": "A Yii2 extension that includes database tables, models and an admin module to store locations.",
     "keywords": ["yii2", "location", "country", "region", "city", "countries", "regions", "cities", "locations"],
     "homepage": "https://github.com/jlorente/yii2-locations",
