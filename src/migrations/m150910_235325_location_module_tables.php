@@ -139,7 +139,7 @@ class m150910_235325_location_module_tables extends Migration {
      * @return string
      */
     protected function getForeignKeyRegion() {
-        return 'FK_' + Inflector::camelize($this->getRegionTableName()) + '_CountryId';
+        return 'FK_' . Inflector::camelize($this->getRegionTableName()) . '_CountryId';
     }
 
     /**
@@ -149,7 +149,7 @@ class m150910_235325_location_module_tables extends Migration {
      * @return string
      */
     protected function getForeignKeyCity() {
-        return 'FK_' + Inflector::camelize($this->getCityTableName()) + '_RegionId';
+        return 'FK_' . Inflector::camelize($this->getCityTableName()) . '_RegionId';
     }
 
     /**
@@ -159,7 +159,7 @@ class m150910_235325_location_module_tables extends Migration {
      * @return string
      */
     protected function getForeignKeyLocCountry() {
-        return 'FK_' + Inflector::camelize($this->getLocationTableName()) + '_CountryId';
+        return 'FK_' . Inflector::camelize($this->getLocationTableName()) . '_CountryId';
     }
 
     /**
@@ -169,7 +169,7 @@ class m150910_235325_location_module_tables extends Migration {
      * @return string
      */
     protected function getForeignKeyLocRegion() {
-        return 'FK_' + Inflector::camelize($this->getLocationTableName()) + '_RegionId';
+        return 'FK_' . Inflector::camelize($this->getLocationTableName()) . '_RegionId';
     }
 
     /**
@@ -179,7 +179,7 @@ class m150910_235325_location_module_tables extends Migration {
      * @return string
      */
     protected function getForeignKeyLocCity() {
-        return 'FK_' + Inflector::camelize($this->getLocationTableName()) + '_CityId';
+        return 'FK_' . Inflector::camelize($this->getLocationTableName()) . '_CityId';
     }
 
 }

@@ -12,6 +12,7 @@ namespace jlorente\location\db;
 use Yii;
 use jlorente\location\exceptions\SaveException;
 use jlorente\location\models\Coordinates;
+use yii\db\ActiveRecord as BaseActiveRecord;
 
 /**
  * This is the model class for table "jl_loc_location".
@@ -31,7 +32,7 @@ use jlorente\location\models\Coordinates;
  * 
  * @author José Lorente <jose.lorente.martin@gmail.com>
  */
-class Location extends yii\db\ActiveRecord {
+class Location extends BaseActiveRecord {
 
     /**
      * @inheritdoc
