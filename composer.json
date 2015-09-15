@@ -12,7 +12,8 @@
         }
     ],
     "require": {
-        "jlorente/yii2-google-maps-library": "*"
+        "jlorente/yii2-google-maps-library": "*",
+        "kartik-v/yii2-widget-depdrop": "~1.0"
     },
     "autoload": {
         "psr-4": {
