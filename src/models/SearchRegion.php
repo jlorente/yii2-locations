@@ -26,7 +26,7 @@ class SearchRegion extends Region {
      */
     public function rules() {
         return [
-            [['id', 'zone_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['id', 'country_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['name'], 'safe'],
         ];
     }
@@ -56,7 +56,7 @@ class SearchRegion extends Region {
         }
         $query->andFilterWhere([
             'id' => $this->id,
-            'zone_id' => $this->zone_id,
+            'country_id' => $this->country_id,
             'created_at' => $this->created_at,
             'created_by' => $this->created_by,
             'updated_at' => $this->updated_at,

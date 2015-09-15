@@ -20,6 +20,7 @@ use yii\helpers\ArrayHelper,
 use kartik\depdrop\DepDrop;
 use yii\widgets\ActiveForm;
 use yii\base\InvalidConfigException;
+use jlorente\location\Module;
 
 /**
  * 
@@ -46,6 +47,10 @@ class LocationFormWidget extends Widget {
      */
     public $localized = 'address';
 
+    /**
+     * @inheritdoc
+     * @throws InvalidConfigException
+     */
     public function init() {
         parent::init();
 
@@ -58,21 +63,25 @@ class LocationFormWidget extends Widget {
         }
     }
 
+    /**
+     * @inheritdoc
+     */
     public function run() {
+        $module = Module::getInstance();
         echo $this->form->field($this->model, $this->model->getCountryPropertyName())->dropDownList(
                 ArrayHelper::map(
                         Country::find()->orderBy(['name' => SORT_ASC])->all(), 'id', 'name'), [
             'id' => 'location_country_id',
-            'prompt' => Yii::t('common/geo/country', 'Select country'),
+            'prompt' => Yii::t('jlorente/location', 'Select country'),
         ]);
         if ($this->localized === $this->model->getCountryPropertyName()) {
             return;
         }
         echo $this->form->field($this->model, $this->model->getRegionPropertyName())->widget(DepDrop::className(), [
-            'options' => ['id' => 'location_region_id', 'placeholder' => Yii::t('common/geo/region', 'Select region')],
+            'options' => ['id' => 'location_region_id', 'placeholder' => Yii::t('jlorente/location', 'Select region')],
             'data' => ArrayHelper::map(Region::find()->where(['country_id' => $this->model->country_id])->orderBy(['name' => SORT_ASC])->all(), 'id', 'name'),
             'pluginOptions' => [
-                'url' => Url::to(['/geo/region/list']),
+                'url' => Url::to(["/{$module->id}/region/list"]),
                 'depends' => ['location_country_id']
             ]
         ]);
@@ -80,10 +89,10 @@ class LocationFormWidget extends Widget {
             return;
         }
         echo $this->form->field($this->model, $this->model->getCityPropertyName())->widget(DepDrop::className(), [
-            'options' => ['id' => 'location_city_id', 'cityholder' => Yii::t('common/geo/city', 'Select city')],
+            'options' => ['id' => 'location_city_id', 'cityholder' => Yii::t('jlorente/location', 'Select city')],
             'data' => ArrayHelper::map(City::find()->where(['region_id' => $this->model->region_id])->orderBy(['name' => SORT_ASC])->all(), 'id', 'name'),
             'pluginOptions' => [
-                'url' => Url::to(['/geo/city/list']),
+                'url' => Url::to(["/{$module->id}/city/list"]),
                 'depends' => ['location_region_id']
             ]
         ]);
@@ -91,6 +100,7 @@ class LocationFormWidget extends Widget {
             return;
         }
         echo $this->form->field($this->model, 'address')->textInput();
+        echo $this->form->field($this->model, 'postal_code')->textInput();
     }
 
     /**

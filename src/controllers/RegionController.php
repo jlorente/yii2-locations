@@ -21,7 +21,7 @@ use yii\helpers\ArrayHelper;
  * 
  * @author José Lorente <jose.lorente.martin@gmail.com>
  */
-class RegionController extends Controller {
+class RegionController extends CrudController {
 
     use LocationControllerTrait;
 

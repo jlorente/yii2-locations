@@ -65,6 +65,7 @@ class m150910_235325_location_module_tables extends Migration {
             'region_id' => Schema::TYPE_INTEGER,
             'city_id' => Schema::TYPE_INTEGER,
             'address' => Schema::TYPE_STRING,
+            'postal_code' => Schema::TYPE_STRING,
             'latitude' => Schema::TYPE_DOUBLE,
             'longitude' => Schema::TYPE_DOUBLE
         ]);
@@ -85,6 +86,9 @@ class m150910_235325_location_module_tables extends Migration {
     public function down() {
         $this->dropForeignKey($this->getForeignKeyCity(), $this->getCityTableName());
         $this->dropForeignKey($this->getForeignKeyRegion(), $this->getRegionTableName());
+        $this->dropForeignKey($this->getForeignKeyLocCity(), $this->getLocationTableName());
+        $this->dropForeignKey($this->getForeignKeyLocRegion(), $this->getLocationTableName());
+        $this->dropForeignKey($this->getForeignKeyLocCountry(), $this->getLocationTableName());
 
         $this->dropTable($this->getCityTableName());
         $this->dropTable($this->getRegionTableName());

@@ -49,7 +49,7 @@ class City extends ActiveRecord {
     public function attributeLabels() {
         return array_merge(parent::attributeLabels(), [
             'id' => Yii::t('jlorente/location', 'ID'),
-            'region_id' => Yii::t('jlorente/location', 'Region ID'),
+            'region_id' => Yii::t('jlorente/location', 'Region'),
             'name' => Yii::t('jlorente/location', 'Name')
         ]);
     }

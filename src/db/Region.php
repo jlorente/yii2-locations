@@ -50,7 +50,7 @@ class Region extends ActiveRecord {
     public function attributeLabels() {
         return array_merge(parent::attributeLabels(), [
             'id' => Yii::t('jlorente/location', 'ID'),
-            'country_id' => Yii::t('jlorente/location', 'Zone ID'),
+            'country_id' => Yii::t('jlorente/location', 'Country'),
             'name' => Yii::t('jlorente/location', 'Name')
         ]);
     }

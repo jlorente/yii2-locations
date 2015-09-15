@@ -39,7 +39,6 @@ class Module extends BaseModule {
             '@jlorenteLocation' => '@vendor/jlorente/yii2-locations/src',
         ]);
         Yii::$app->i18n->translations['jlorente/location'] = $this->getMessageConfig();
-        $this->initDefaults();
     }
 
     /**

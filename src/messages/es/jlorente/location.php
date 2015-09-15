@@ -31,5 +31,9 @@ return [
     'Latitude' => 'Latitud',
     'Longitude' => 'Longitud',
     'Name' => 'Nombre',
-    'Country Code' => 'Código de País'
+    'Country Code' => 'Código de País',
+    'Created At' => 'Fecha de creación',
+    'Created By' => 'Creador',
+    'Updated At' => 'Fecha de modificación',
+    'Updated By' => 'Modificador'
 ];
