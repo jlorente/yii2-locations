@@ -29,6 +29,12 @@ class LocationMap extends Widget {
 
     /**
      *
+     * @var array
+     */
+    public $markerOptions = [];
+
+    /**
+     *
      * @var LocationInterface
      */
     protected $model;
@@ -56,10 +62,10 @@ class LocationMap extends Widget {
             'lng' => $this->model->longitude
         ]);
         $this->mapOptions['center'] = $coord;
-        $map = new Map($this->mapOptions);
-        $marker = new Marker([
+        $map = new Map($this->mapOptions);        
+        $marker = new Marker(array_merge($this->markerOptions, [
             'position' => $coord
-        ]);
+        ]));
         $map->addOverlay($marker);
         echo Html::tag('div', $map->display(), ['class' => 'map-canvas']);
     }
