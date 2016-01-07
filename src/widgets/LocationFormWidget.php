@@ -21,6 +21,7 @@ use kartik\depdrop\DepDrop;
 use yii\widgets\ActiveForm;
 use yii\base\InvalidConfigException;
 use jlorente\location\Module;
+use yii\widgets\ActiveField;
 
 /**
  * 
@@ -28,6 +29,12 @@ use jlorente\location\Module;
  * @author José Lorente <jose.lorente.martin@gmail.com>
  */
 class LocationFormWidget extends Widget {
+
+    /**
+     *
+     * @var array
+     */
+    protected $parts;
 
     /**
      *
@@ -43,9 +50,21 @@ class LocationFormWidget extends Widget {
 
     /**
      *
+     * @var string 
+     */
+    public $template = "{country}\n{region}\n{city}\n{address}\n{postalCode}\n{geolocation}";
+
+    /**
+     *
      * @var string
      */
     public $localized = 'address';
+
+    /**
+     *
+     * @var Module
+     */
+    protected $module;
 
     /**
      * @inheritdoc
@@ -61,46 +80,81 @@ class LocationFormWidget extends Widget {
         if ($this->model === null) {
             throw InvalidConfigException('model property must be provided');
         }
+        $this->module = Module::getInstance();
     }
 
     /**
      * @inheritdoc
      */
     public function run() {
-        $module = Module::getInstance();
-        echo $this->form->field($this->model, $this->model->getCountryPropertyName())->dropDownList(
+        $this->country();
+        $this->region();
+        $this->city();
+        $this->address();
+        $this->postalCode();
+        $this->geolocation();
+        return strtr($this->template, $this->parts);
+    }
+
+    /**
+     * Renders the country part.
+     */
+    protected function country() {
+        $this->parts['{country}'] = $this->form->field($this->model, $this->model->getCountryPropertyName())->dropDownList(
                 ArrayHelper::map(
                         Country::find()->orderBy(['name' => SORT_ASC])->all(), 'id', 'name'), [
             'id' => 'location_country_id',
             'prompt' => Yii::t('jlorente/location', 'Select country'),
         ]);
-        if ($this->localized === $this->model->getCountryPropertyName()) {
-            return;
-        }
-        echo $this->form->field($this->model, $this->model->getRegionPropertyName())->widget(DepDrop::className(), [
+    }
+
+    /**
+     * Renders the region part.
+     */
+    protected function region() {
+        $this->parts['{region}'] = $this->form->field($this->model, $this->model->getRegionPropertyName())->widget(DepDrop::className(), [
             'options' => ['id' => 'location_region_id', 'placeholder' => Yii::t('jlorente/location', 'Select region')],
             'data' => ArrayHelper::map(Region::find()->where(['country_id' => $this->model->country_id])->orderBy(['name' => SORT_ASC])->all(), 'id', 'name'),
             'pluginOptions' => [
-                'url' => Url::to(["/{$module->id}/region/list"]),
+                'url' => Url::to(["/{$this->module->id}/region/list"]),
                 'depends' => ['location_country_id']
             ]
         ]);
-        if ($this->localized === $this->model->getRegionPropertyName()) {
-            return;
-        }
-        echo $this->form->field($this->model, $this->model->getCityPropertyName())->widget(DepDrop::className(), [
+    }
+
+    /**
+     * Renders the city part.
+     */
+    protected function city() {
+        $this->parts['{city}'] = $this->form->field($this->model, $this->model->getCityPropertyName())->widget(DepDrop::className(), [
             'options' => ['id' => 'location_city_id', 'cityholder' => Yii::t('jlorente/location', 'Select city')],
             'data' => ArrayHelper::map(City::find()->where(['region_id' => $this->model->region_id])->orderBy(['name' => SORT_ASC])->all(), 'id', 'name'),
             'pluginOptions' => [
-                'url' => Url::to(["/{$module->id}/city/list"]),
+                'url' => Url::to(["/{$this->module->id}/city/list"]),
                 'depends' => ['location_region_id']
             ]
         ]);
-        if ($this->localized === $this->model->getCityPropertyName()) {
-            return;
-        }
-        echo $this->form->field($this->model, 'address')->textInput();
-        echo $this->form->field($this->model, 'postal_code')->textInput();
+    }
+
+    /**
+     * Renders the address part.
+     */
+    protected function address() {
+        $this->parts['{address}'] = $this->form->field($this->model, 'address')->textInput();
+    }
+
+    /**
+     * Renders the postalCode part.
+     */
+    protected function postalCode() {
+        $this->parts['{postalCode}'] = $this->form->field($this->model, 'postal_code')->textInput();
+    }
+
+    /**
+     * Renders the geolocation part.
+     */
+    protected function geolocation() {
+        $this->parts['{geolocation}'] = $this->form->field($this->model, 'latitude') . "\n" . $this->form->field($this->model, 'longitude');
     }
 
     /**
