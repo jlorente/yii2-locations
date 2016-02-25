@@ -17,6 +17,11 @@ use yii\helpers\Inflector;
 /**
  * Location module tables creation.
  * 
+ * To apply this migration run:
+ * ```bash
+ * $ ./yii migrate --migrationPath=@vendor/jlorente/yii2-locations/src/migrations
+ * ```
+ * 
  * @author José Lorente <jose.lorente.martin@gmail.com>
  */
 class m150910_235325_location_module_tables extends Migration {
