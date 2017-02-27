@@ -9,15 +9,16 @@
 
 namespace jlorente\location;
 
-use yii\base\Module as BaseModule;
 use Yii;
+use yii\base\Module as BaseModule;
+use yii\base\BootstrapInterface;
 
 /**
  * Module class for the location module.
  * 
  * @author José Lorente <jose.lorente.martin@gmail.com>
  */
-class Module extends BaseModule {
+class Module extends BaseModule implements BootstrapInterface {
 
     /**
      *
@@ -51,6 +52,18 @@ class Module extends BaseModule {
             'basePath' => '@jlorenteLocation/messages',
             'forceTranslation' => true
                 ], $this->messageConfig);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function bootstrap($app) {
+        $app->getUrlManager()->addRules([
+            //TypeController
+            'location/country/list' => 'location/country/list'
+            , 'location/region/list' => 'location/region/list'
+            , 'location/city/list' => 'location/city/list'
+                ], false);
     }
 
 }

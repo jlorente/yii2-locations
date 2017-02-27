@@ -13,6 +13,9 @@ use Yii;
 use jlorente\location\db\Country,
     jlorente\location\db\Region,
     jlorente\location\db\City;
+use jlorente\location\validators\CityValidator,
+    jlorente\location\validators\RegionValidator,
+    jlorente\location\validators\CountryValidator;
 
 /**
  * Trait to use in the model to be localized. 
@@ -73,63 +76,15 @@ trait LocationTrait {
      */
     public function locationRules() {
         return [
-            [['country_id', 'region_id', 'city_id'], 'integer'],
-            [['address', 'postal_code'], 'string', 'max' => 255],
-            [['latitude', 'longitude'], 'double'],
-            ['city_id', 'validateCity'],
-            ['region_id', 'validateRegion'],
-            ['country_id', 'validateCountry'],
+            [['country_id', 'region_id', 'city_id'], 'default', 'value' => null]
+            , [['country_id', 'region_id', 'city_id'], 'integer']
+            , [['address', 'postal_code'], 'string', 'max' => 255]
+            , [['address', 'postal_code'], 'trim']
+            , [['latitude', 'longitude'], 'double']
+            , ['city_id', CityValidator::className(), 'regionAttribute' => 'region_id']
+            , ['region_id', RegionValidator::className(), 'countryAttribute' => 'country_id']
+            , ['country_id', CountryValidator::className()]
         ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function validateCity() {
-        if ($this->city_id !== null) {
-            $city = City::findOne($this->city_id);
-            if ($city === null) {
-                $this->addError('city_id', Yii::t('location', 'City with id {[id]} doesn\'t exist', [
-                            'id' => $this->city_id
-                ]));
-                return false;
-            }
-            $this->region_id = $city->region_id;
-        }
-        return true;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function validateRegion() {
-        if ($this->region_id !== null) {
-            $region = Region::findOne($this->region_id);
-            if ($region === null) {
-                $this->addError('zone_id', Yii::t('location', 'Region with id {[id]} doesn\'t exist', [
-                            'id' => $this->region_id
-                ]));
-                return false;
-            }
-            $this->country_id = $region->country_id;
-        }
-        return true;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function validateCountry() {
-        if ($this->country_id !== null) {
-            $country = Country::findOne($this->country_id);
-            if ($country === null) {
-                $this->addError('country_id', Yii::t('location', 'Country with id {[id]} doesn\'t exist', [
-                            'id' => $this->country_id
-                ]));
-                return false;
-            }
-        }
-        return true;
     }
 
     /**

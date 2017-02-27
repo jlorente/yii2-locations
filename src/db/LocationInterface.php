@@ -21,21 +21,6 @@ interface LocationInterface {
     public function locationRules();
 
     /**
-     * @return bool
-     */
-    public function validateRegion();
-
-    /**
-     * @return bool
-     */
-    public function validateCity();
-
-    /**
-     * @return bool
-     */
-    public function validateCountry();
-
-    /**
      * 
      * @return \yii\db\ActiveQuery
      */
