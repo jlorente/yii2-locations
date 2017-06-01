@@ -135,4 +135,15 @@ class Location extends BaseActiveRecord {
         return $normalized;
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function fields() {
+        return array_merge(parent::fields(), [
+            'country' => 'country'
+            , 'region' => 'region'
+            , 'city' => 'city'
+        ]);
+    }
+
 }

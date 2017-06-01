@@ -209,4 +209,19 @@ trait LocationTrait {
         return $this->hasOne(City::className(), ['id' => 'city_id']);
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function fields() {
+        return array_merge(parent::fields(), [
+            'country_id' => 'country_id'
+            , 'region_id' => 'region_id'
+            , 'city_id' => 'city_id'
+            , 'address' => 'address'
+            , 'postal_code' => 'postal_code'
+            , 'latitude' => 'latitude'
+            , 'longitude' => 'longitude'
+        ]);
+    }
+
 }
