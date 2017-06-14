@@ -126,7 +126,7 @@ class CountryController extends CrudController {
         $searchModel = new SearchCountry();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->setPagination(false);
-        $dataProvider->getSort()->defaultOrder = ['name' => SORT_DESC];
+        $dataProvider->getSort()->defaultOrder = ['name' => SORT_ASC];
         return ArrayHelper::map($dataProvider->getModels(), 'id', 'name');
     }
 

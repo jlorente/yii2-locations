@@ -22,6 +22,7 @@ use kartik\depdrop\DepDrop;
 use yii\widgets\ActiveForm;
 use yii\base\InvalidConfigException;
 use jlorente\location\Module;
+use yii\helpers\Inflector;
 
 /**
  * 
@@ -74,6 +75,12 @@ class LocationFormWidget extends Widget {
     protected $module;
 
     /**
+     *
+     * @var array
+     */
+    protected $fieldIds = [];
+
+    /**
      * @inheritdoc
      * @throws InvalidConfigException
      */
@@ -87,6 +94,7 @@ class LocationFormWidget extends Widget {
         if ($this->model === null) {
             throw new InvalidConfigException('model property must be provided');
         }
+        $this->ensureFieldIds();
         $this->module = Module::getInstance();
     }
 
@@ -109,7 +117,7 @@ class LocationFormWidget extends Widget {
     protected function country() {
         $this->parts['{country}'] = $this->form->field($this->model, $this->model->getCountryPropertyName(), ['options' => ['name' => 'hola']])->dropDownList(
                 ArrayHelper::map(Country::find()->orderBy(['name' => SORT_ASC])->all(), 'id', 'name'), [
-            'id' => 'location_country_id'
+            'id' => $this->fieldIds['country']
             , 'prompt' => Yii::t('jlorente/location', 'Select country')
             , 'name' => $this->getSubmitModelName($this->model->getCountryPropertyName())
         ]);
@@ -121,14 +129,14 @@ class LocationFormWidget extends Widget {
     protected function region() {
         $this->parts['{region}'] = $this->form->field($this->model, $this->model->getRegionPropertyName())->widget(DepDrop::className(), [
             'options' => [
-                'id' => 'location_region_id'
+                'id' => $this->fieldIds['region']
                 , 'placeholder' => Yii::t('jlorente/location', 'Select region')
                 , 'name' => $this->getSubmitModelName($this->model->getRegionPropertyName())
             ]
             , 'data' => ArrayHelper::map(Region::find()->where(['country_id' => $this->model->country_id])->orderBy(['name' => SORT_ASC])->all(), 'id', 'name')
             , 'pluginOptions' => [
                 'url' => Url::to(["/{$this->module->id}/region/list"])
-                , 'depends' => ['location_country_id']
+                , 'depends' => [$this->fieldIds['country']]
             ]
         ]);
     }
@@ -139,14 +147,14 @@ class LocationFormWidget extends Widget {
     protected function city() {
         $this->parts['{city}'] = $this->form->field($this->model, $this->model->getCityPropertyName())->widget(DepDrop::className(), [
             'options' => [
-                'id' => 'location_city_id'
+                'id' => $this->fieldIds['city']
                 , 'cityholder' => Yii::t('jlorente/location', 'Select city')
                 , 'name' => $this->getSubmitModelName($this->model->getCityPropertyName())
             ]
             , 'data' => ArrayHelper::map(City::find()->where(['region_id' => $this->model->region_id])->orderBy(['name' => SORT_ASC])->all(), 'id', 'name')
             , 'pluginOptions' => [
                 'url' => Url::to(["/{$this->module->id}/city/list"])
-                , 'depends' => ['location_region_id']
+                , 'depends' => [$this->fieldIds['region']]
             ]
         ]);
     }
@@ -157,6 +165,7 @@ class LocationFormWidget extends Widget {
     protected function address() {
         $this->parts['{address}'] = $this->form->field($this->model, 'address')->textInput([
             'name' => $this->getSubmitModelName('address')
+            , 'id' => $this->fieldIds['address']
         ]);
     }
 
@@ -166,6 +175,7 @@ class LocationFormWidget extends Widget {
     protected function postalCode() {
         $this->parts['{postalCode}'] = $this->form->field($this->model, 'postal_code')->textInput([
             'name' => $this->getSubmitModelName('postal_code')
+            , 'id' => $this->fieldIds['postal_code']
         ]);
     }
 
@@ -175,10 +185,12 @@ class LocationFormWidget extends Widget {
     protected function geolocation() {
         $this->parts['{geolocation}'] = $this->form->field($this->model, 'latitude')->textInput([
                     'name' => $this->getSubmitModelName('latitude')
+                    , 'id' => $this->fieldIds['latitude']
                 ])
                 . "\n"
                 . $this->form->field($this->model, 'longitude')->textInput([
                     'name' => $this->getSubmitModelName('longitude')
+                    , 'id' => $this->fieldIds['longitude']
         ]);
     }
 
@@ -206,6 +218,27 @@ class LocationFormWidget extends Widget {
      */
     public function getSubmitModelName($attribute) {
         return empty($this->submitModelName) ? Html::getInputName($this->model, $attribute) : $this->submitModelName . "[$attribute]";
+    }
+
+    /**
+     * Ensures the field ids names.
+     */
+    protected function ensureFieldIds() {
+        if ($this->submitModelName) {
+            $formName = Inflector::slug($this->submitModelName, '_');
+        } else {
+            $model = new \ReflectionClass($this->model);
+            $formName = $model->getShortName();
+        }
+        $this->fieldIds = [
+            'country' => $formName . '_country_id'
+            , 'region' => $formName . '_region_id'
+            , 'city' => $formName . '_city_id'
+            , 'address' => $formName . '_address'
+            , 'postal_code' => $formName . '_postal_code'
+            , 'latitude' => $formName . '_latitude'
+            , 'longitude' => $formName . '_longitude'
+        ];
     }
 
 }
