@@ -27,6 +27,12 @@ class Module extends BaseModule implements BootstrapInterface {
     public $messageConfig = [];
 
     /**
+     *
+     * @var string 
+     */
+    public $listRole = '@';
+    
+    /**
      * @inheritdoc
      */
     public $controllerNamespace = 'jlorente\location\controllers';

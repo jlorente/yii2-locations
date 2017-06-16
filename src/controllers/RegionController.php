@@ -10,11 +10,12 @@
 namespace jlorente\location\controllers;
 
 use Yii;
-use jlorente\location\models\SearchRegion;
-use jlorente\location\db\Region;
-use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\helpers\ArrayHelper;
+use jlorente\location\db\Region;
+use yii\web\NotFoundHttpException;
+use jlorente\location\models\SearchRegion;
+
 
 /**
  * RegionController implements the CRUD actions for Region model.

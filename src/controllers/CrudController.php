@@ -9,9 +9,12 @@
 
 namespace jlorente\location\controllers;
 
+use yii\web\Response;
 use yii\web\Controller;
-use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
+use yii\filters\VerbFilter,
+    yii\filters\AccessControl;
+use jlorente\location\Module;
+use yii\filters\ContentNegotiator;
 
 /**
  * Base controller class for all the backend module controllers.
@@ -29,10 +32,20 @@ class CrudController extends Controller {
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'list'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete'],
                         'allow' => true,
                         'roles' => ['@']
-                    ],
+                    ]
+                    , [
+                        'actions' => ['list']
+                        , 'allow' => true
+                        , 'roles' => ['@']
+                    ]
+                    , [
+                        'actions' => ['list']
+                        , 'allow' => true
+                        , 'roles' => ['?']
+                    ]
                 ],
             ],
             'verbs' => [
@@ -40,6 +53,13 @@ class CrudController extends Controller {
                 'actions' => [
                     'delete' => ['post'],
                 ],
+            ]
+            , 'content' => [
+                'class' => ContentNegotiator::className()
+                , 'only' => ['list']
+                , 'formats' => [
+                    'application/json' => Response::FORMAT_JSON,
+                ]
             ]
         ];
     }
