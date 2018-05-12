@@ -12,6 +12,7 @@ namespace jlorente\location\db;
 use Yii;
 use jlorente\location\exceptions\SaveException;
 use jlorente\location\models\Coordinates;
+use jlorente\location\db\LocationInterface;
 use yii\db\ActiveRecord as BaseActiveRecord;
 
 /**
@@ -19,9 +20,8 @@ use yii\db\ActiveRecord as BaseActiveRecord;
  *
  * @property integer $id
  * @property integer $country_id
- * @property integer $zone_id
  * @property integer $region_id
- * @property integer $place_id
+ * @property integer $city_id
  * @property string $address
  * @property double $latitude
  * @property double $longitude
@@ -32,19 +32,22 @@ use yii\db\ActiveRecord as BaseActiveRecord;
  * 
  * @author José Lorente <jose.lorente.martin@gmail.com>
  */
-class Location extends BaseActiveRecord {
+class Location extends BaseActiveRecord implements LocationInterface
+{
 
     /**
      * @inheritdoc
      */
-    public static function tableName() {
+    public static function tableName()
+    {
         return 'jl_loc_location';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules() {
+    public function rules()
+    {
         return [
             [['country_id', 'region_id', 'city_id'], 'integer'],
             [['latitude', 'longitude'], 'number'],
@@ -55,7 +58,8 @@ class Location extends BaseActiveRecord {
     /**
      * @inheritdoc
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'id' => Yii::t('jlorente/location', 'ID'),
             'country_id' => Yii::t('jlorente/location', 'Country'),
@@ -72,7 +76,8 @@ class Location extends BaseActiveRecord {
      * 
      * @return yii\db\ActiveQuery
      */
-    public function getRegion() {
+    public function getRegion()
+    {
         return $this->hasOne(Region::className(), ['id' => 'region_id']);
     }
 
@@ -80,7 +85,8 @@ class Location extends BaseActiveRecord {
      * 
      * @return yii\db\ActiveQuery
      */
-    public function getCity() {
+    public function getCity()
+    {
         return $this->hasOne(City::className(), ['id' => 'city_id']);
     }
 
@@ -88,7 +94,8 @@ class Location extends BaseActiveRecord {
      * 
      * @return yii\db\ActiveQuery
      */
-    public function getCountry() {
+    public function getCountry()
+    {
         return $this->hasOne(Country::className(), ['id' => 'country_id']);
     }
 
@@ -96,7 +103,8 @@ class Location extends BaseActiveRecord {
      * 
      * @throws SaveException
      */
-    public function updateCoordinates() {
+    public function updateCoordinates()
+    {
         $address = '';
         if (empty($this->address) === false) {
             $matches = [];
@@ -121,7 +129,8 @@ class Location extends BaseActiveRecord {
      * 
      * @return string
      */
-    public function getLocationString() {
+    public function getLocationString()
+    {
         $normalized = '';
         if ($this->city !== null) {
             $normalized .= $this->city->name;
@@ -138,12 +147,53 @@ class Location extends BaseActiveRecord {
     /**
      * @inheritdoc
      */
-    public function fields() {
+    public function fields()
+    {
         return array_merge(parent::fields(), [
             'country' => 'country'
             , 'region' => 'region'
             , 'city' => 'city'
         ]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function locationRules()
+    {
+        return $this->rules();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getLocation()
+    {
+        return static::findOne($this->id);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCountryPropertyName()
+    {
+        return 'country_id';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCityPropertyName()
+    {
+        return 'city_id';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRegionPropertyName()
+    {
+        return 'region_id';
     }
 
 }
