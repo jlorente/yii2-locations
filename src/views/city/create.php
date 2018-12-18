@@ -15,10 +15,12 @@ $this->title = Yii::t('jlorente/location', 'Create {modelClass}', [
             'modelClass' => Yii::t('jlorente/location', 'City')
         ]);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('jlorente/location', 'Countries'), 'url' => ['country/index']];
-$this->params['breadcrumbs'][] = ['label' => $model->region->country->name, 'url' => ['country/view', 'id' => $model->region->country_id]];
-$this->params['breadcrumbs'][] = ['label' => Yii::t('jlorente/location', 'Regions'), 'url' => ['region/index', 'countryId' => $model->region->country_id]];
+$this->params['breadcrumbs'][] = ['label' => $model->region->state->country->name, 'url' => ['country/view', 'id' => $model->region->state->country_id]];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('jlorente/location', 'States'), 'url' => ['state/index', 'country_id' => $model->region->state->country_id]];
+$this->params['breadcrumbs'][] = ['label' => $model->region->state->name, 'url' => ['state/view', 'id' => $model->region->state_id]];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('jlorente/location', 'Regions'), 'url' => ['index', 'country_id' => $model->region->state->country_id, 'state_id' => $model->region->state_id]];
 $this->params['breadcrumbs'][] = ['label' => $model->region->name, 'url' => ['region/view', 'id' => $model->region_id]];
-$this->params['breadcrumbs'][] = ['label' => Yii::t('jlorente/location', 'Cities'), 'url' => ['index', 'regionId' => $model->region_id]];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('jlorente/location', 'Cities'), 'url' => ['index', 'country_id' => $model->region->state->country_id, 'state_id' => $model->region->state_id, 'region_id' => $model->region_id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="place-create">

@@ -13,7 +13,8 @@ namespace jlorente\location\db;
  * 
  * @author José Lorente <jose.lorente.martin@gmail.com>
  */
-interface LocationInterface {
+interface LocationInterface
+{
 
     /**
      * @return array
@@ -40,4 +41,9 @@ interface LocationInterface {
      * @return string
      */
     public function getRegionPropertyName();
+
+    /**
+     * @return string
+     */
+    public function getStatePropertyName();
 }

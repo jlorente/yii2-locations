@@ -19,22 +19,25 @@ use jlorente\location\db\Region;
  * 
  * @author José Lorente <jose.lorente.martin@gmail.com>
  */
-class SearchRegion extends Region {
+class SearchRegion extends Region
+{
 
     /**
      * @inheritdoc
      */
-    public function rules() {
+    public function rules()
+    {
         return [
-            [['id', 'country_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['name'], 'safe'],
+            [['id', 'country_id', 'state_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer']
+            , [['name'], 'safe']
         ];
     }
 
     /**
      * @inheritdoc
      */
-    public function scenarios() {
+    public function scenarios()
+    {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
@@ -45,22 +48,24 @@ class SearchRegion extends Region {
      * @param array $params
      * @return ActiveDataProvider
      */
-    public function search($params) {
+    public function search($params)
+    {
         $query = Region::find();
         $dataProvider = new ActiveDataProvider([
-            'query' => $query,
+            'query' => $query
         ]);
         $this->load($params);
         if (!$this->validate()) {
             return $dataProvider;
         }
         $query->andFilterWhere([
-            'id' => $this->id,
-            'country_id' => $this->country_id,
-            'created_at' => $this->created_at,
-            'created_by' => $this->created_by,
-            'updated_at' => $this->updated_at,
-            'updated_by' => $this->updated_by,
+            'id' => $this->id
+            , 'country_id' => $this->country_id
+            , 'state_id' => $this->state_id
+            , 'created_at' => $this->created_at
+            , 'created_by' => $this->created_by
+            , 'updated_at' => $this->updated_at
+            , 'updated_by' => $this->updated_by
         ]);
         $query->andFilterWhere(['like', 'name', $this->name]);
         return $dataProvider;

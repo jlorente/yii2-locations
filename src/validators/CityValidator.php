@@ -18,7 +18,8 @@ use jlorente\location\db\City;
  * 
  * @author José Lorente <jose.lorente.martin@gmail.com>
  */
-class CityValidator extends Validator {
+class CityValidator extends Validator
+{
 
     /**
      * If setted, the validator with fill the region attribute with the 
@@ -29,9 +30,26 @@ class CityValidator extends Validator {
     public $regionAttribute;
 
     /**
+     * If setted, the validator with fill the country attribute with the 
+     * country_id of the validated region.
+     * 
+     * @var string
+     */
+    public $stateAttribute;
+
+    /**
+     * If setted, the validator with fill the country attribute with the 
+     * country_id of the validated region.
+     * 
+     * @var string
+     */
+    public $countryAttribute;
+
+    /**
      * @inheritdoc
      */
-    public function validateAttribute($model, $attribute) {
+    public function validateAttribute($model, $attribute)
+    {
         parent::validateAttribute($model, $attribute);
         if ($model->$attribute !== null) {
             $city = City::findOne($model->$attribute);
@@ -44,6 +62,12 @@ class CityValidator extends Validator {
             if (empty($this->regionAttribute) === false) {
                 $model->{$this->regionAttribute} = $city->region_id;
             }
+            if (empty($this->stateAttribute) === false) {
+                $model->{$this->stateAttribute} = $city->state_id;
+            }
+            if (empty($this->countryAttribute) === false) {
+                $model->{$this->countryAttribute} = $city->country_id;
+            }
         }
         return true;
     }
@@ -53,7 +77,8 @@ class CityValidator extends Validator {
      * 
      * Checks if the given city id exists.
      */
-    protected function validateValue($value) {
+    protected function validateValue($value)
+    {
         if (City::find()->andWhere(['id' => $value])->exists() === false) {
             return Yii::t('location', 'City with id {[id]} doesn\'t exist', [
                         'id' => $value

@@ -18,12 +18,14 @@ use jlorente\location\db\Country;
  * 
  * @author José Lorente <jose.lorente.martin@gmail.com>
  */
-class CountryValidator extends Validator {
+class CountryValidator extends Validator
+{
 
     /**
      * @inheritdoc
      */
-    public function validateAttribute($model, $attribute) {
+    public function validateAttribute($model, $attribute)
+    {
         parent::validateAttribute($model, $attribute);
         if ($model->$attribute !== null) {
             $country = Country::findOne($model->$attribute);
@@ -42,7 +44,8 @@ class CountryValidator extends Validator {
      * 
      * Checks if the given country id exists.
      */
-    protected function validateValue($value) {
+    protected function validateValue($value)
+    {
         if (Country::find()->andWhere(['id' => $value])->exists() === false) {
             return Yii::t('location', 'Country with id {[id]} doesn\'t exist', [
                         'id' => $value

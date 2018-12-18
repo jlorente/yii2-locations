@@ -14,8 +14,10 @@ use yii\widgets\DetailView;
 
 $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('jlorente/location', 'Countries'), 'url' => ['country/index']];
-$this->params['breadcrumbs'][] = ['label' => $model->country->name, 'url' => ['country/view', 'id' => $model->country_id]];
-$this->params['breadcrumbs'][] = ['label' => Yii::t('jlorente/location', 'Regions'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => $model->state->country->name, 'url' => ['country/view', 'id' => $model->state->country_id]];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('jlorente/location', 'States'), 'url' => ['state/index', 'country_id' => $model->state->country_id]];
+$this->params['breadcrumbs'][] = ['label' => $model->state->name, 'url' => ['state/view', 'id' => $model->state_id]];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('jlorente/location', 'Regions'), 'url' => ['index', 'country_id' => $model->state->country_id, 'state_id' => $model->state_id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="region-view">
@@ -32,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ])
         ?>
         <?=
-        Html::a(Yii::t('jlorente/location', 'Cities'), [ 'city/index', 'regionId' => $model->id], [
+        Html::a(Yii::t('jlorente/location', 'Cities'), ['city/index', 'region_id' => $model->id], [
             'class' => 'btn btn-info pull-right',
         ])
         ?>

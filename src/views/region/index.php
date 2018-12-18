@@ -16,7 +16,9 @@ use yii\grid\ActionColumn;
 
 $this->title = Yii::t('jlorente/location', 'Regions');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('jlorente/location', 'Countries'), 'url' => ['country/index']];
-$this->params['breadcrumbs'][] = ['label' => $searchModel->country->name, 'url' => ['country/view', 'id' => $searchModel->country_id]];
+$this->params['breadcrumbs'][] = ['label' => $searchModel->state->country->name, 'url' => ['country/view', 'id' => $searchModel->state->country_id]];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('jlorente/location', 'States'), 'url' => ['state/index', 'country_id' => $searchModel->state->country_id]];
+$this->params['breadcrumbs'][] = ['label' => $searchModel->state->name, 'url' => ['state/view', 'id' => $searchModel->state_id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="region-index">
@@ -26,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?=
         Html::a(Yii::t('jlorente/location', 'Create {modelClass}', [
                     'modelClass' => 'Region'
-                ]), ['create', 'countryId' => $searchModel->country_id], [
+                ]), ['create', 'country_id' => $searchModel->country_id, 'state_id' => $searchModel->state_id], [
             'class' => 'btn btn-success'
         ])
         ?>
@@ -38,7 +40,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'aria-label' => Yii::t('jlorente/location', 'Cities'),
             'data-pjax' => '0',
         ]);
-        return Html::a('<span class="glyphicon glyphicon-th-list"></span>', ['city/index', 'regionId' => $model->id], $options);
+        return Html::a('<span class="glyphicon glyphicon-th-list"></span>', [
+                    'city/index'
+                    , 'country_id' => $model->country_id
+                    , 'state_id' => $model->state_id
+                    , 'region_id' => $model->id
+                        ], $options);
     };
     echo GridView::widget([
         'dataProvider' => $dataProvider,

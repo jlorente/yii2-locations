@@ -12,6 +12,7 @@ namespace jlorente\location\exceptions;
 /**
  * GeocodingApiException thrown on geocoding api call errors.
  */
-class GeocodingApiException extends \yii\base\Exception {
+class GeocodingApiException extends \yii\base\Exception
+{
     
 }

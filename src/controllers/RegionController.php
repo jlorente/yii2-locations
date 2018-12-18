@@ -9,20 +9,20 @@
 
 namespace jlorente\location\controllers;
 
-use Yii;
-use yii\web\Response;
-use yii\helpers\ArrayHelper;
 use jlorente\location\db\Region;
-use yii\web\NotFoundHttpException;
 use jlorente\location\models\SearchRegion;
-
+use Yii;
+use yii\helpers\ArrayHelper;
+use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 /**
  * RegionController implements the CRUD actions for Region model.
  * 
  * @author José Lorente <jose.lorente.martin@gmail.com>
  */
-class RegionController extends CrudController {
+class RegionController extends CrudController
+{
 
     use LocationControllerTrait;
 
@@ -31,14 +31,14 @@ class RegionController extends CrudController {
      * 
      * @return mixed
      */
-    public function actionIndex($zoneId) {
-        $zone = $this->findZone($zoneId);
-        $searchModel = new SearchRegion(['country_id' => $zone->id]);
+    public function actionIndex()
+    {
+        $searchModel = new SearchRegion(Yii::$app->request->get());
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-                    'searchModel' => $searchModel,
-                    'dataProvider' => $dataProvider,
+                    'searchModel' => $searchModel
+                    , 'dataProvider' => $dataProvider
         ]);
     }
 
@@ -48,9 +48,10 @@ class RegionController extends CrudController {
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id) {
+    public function actionView($id)
+    {
         return $this->render('view', [
-                    'model' => $this->findModel($id),
+                    'model' => $this->findModel($id)
         ]);
     }
 
@@ -60,9 +61,9 @@ class RegionController extends CrudController {
      * 
      * @return mixed
      */
-    public function actionCreate($zoneId) {
-        $zone = $this->findZone($zoneId);
-        $model = new Region(['zone_id' => $zone->id]);
+    public function actionCreate()
+    {
+        $model = new Region(Yii::$app->request->get());
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -79,7 +80,8 @@ class RegionController extends CrudController {
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id) {
+    public function actionUpdate($id)
+    {
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -98,7 +100,8 @@ class RegionController extends CrudController {
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id) {
+    public function actionDelete($id)
+    {
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
@@ -112,7 +115,8 @@ class RegionController extends CrudController {
      * @return Region the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id) {
+    protected function findModel($id)
+    {
         if (($model = Region::findOne($id)) !== null) {
             return $model;
         } else {
@@ -125,14 +129,14 @@ class RegionController extends CrudController {
      * 
      * @return array
      */
-    public function actionList() {
+    public function actionList()
+    {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $parent = Yii::$app->request->post('depdrop_parents');
         if (empty($parent[0])) {
             $output = [];
         } else {
-            $countryId = $parent[0];
-            $searchModel = new SearchRegion(['country_id' => $countryId]);
+            $searchModel = new SearchRegion($parent);
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
             $dataProvider->setPagination(false);
             $dataProvider->getSort()->defaultOrder = ['name' => SORT_ASC];

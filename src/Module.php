@@ -18,7 +18,8 @@ use yii\base\BootstrapInterface;
  * 
  * @author José Lorente <jose.lorente.martin@gmail.com>
  */
-class Module extends BaseModule implements BootstrapInterface {
+class Module extends BaseModule implements BootstrapInterface
+{
 
     /**
      *
@@ -31,7 +32,7 @@ class Module extends BaseModule implements BootstrapInterface {
      * @var string 
      */
     public $listRole = '@';
-    
+
     /**
      * @inheritdoc
      */
@@ -40,7 +41,8 @@ class Module extends BaseModule implements BootstrapInterface {
     /**
      * @inheritdoc
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
         $this->setAliases([
             '@jlorenteLocation' => '@vendor/jlorente/yii2-locations/src',
@@ -52,7 +54,8 @@ class Module extends BaseModule implements BootstrapInterface {
      * 
      * @return array
      */
-    protected function getMessageConfig() {
+    protected function getMessageConfig()
+    {
         return array_merge([
             'class' => 'yii\i18n\PhpMessageSource',
             'basePath' => '@jlorenteLocation/messages',
@@ -63,7 +66,8 @@ class Module extends BaseModule implements BootstrapInterface {
     /**
      * @inheritdoc
      */
-    public function bootstrap($app) {
+    public function bootstrap($app)
+    {
         $app->getUrlManager()->addRules([
             //TypeController
             'location/country/list' => 'location/country/list'

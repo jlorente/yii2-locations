@@ -24,6 +24,8 @@ return [
     'Select region' => 'Selecciona una provincia',
     'City' => 'Ciudad',
     'Cities' => 'Ciudades',
+    'State' => 'Comunidad Autónoma',
+    'States' => 'Comunidades Autónomas',
     'Select city' => 'Selecciona una ciudad',
     'ID' => 'ID',
     'Address' => 'Dirección',

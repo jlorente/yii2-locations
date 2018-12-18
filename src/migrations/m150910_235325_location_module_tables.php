@@ -6,13 +6,9 @@
  * @copyright   José Lorente
  * @version     1.0
  */
+use jlorente\location\core\MigrationTrait;
 use yii\db\Schema;
 use yii\db\Migration;
-use jlorente\location\db\Country,
-    jlorente\location\db\Region,
-    jlorente\location\db\City,
-    jlorente\location\db\Location;
-use yii\helpers\Inflector;
 
 /**
  * Location module tables creation.
@@ -24,12 +20,16 @@ use yii\helpers\Inflector;
  * 
  * @author José Lorente <jose.lorente.martin@gmail.com>
  */
-class m150910_235325_location_module_tables extends Migration {
+class m150910_235325_location_module_tables extends Migration
+{
+
+    use MigrationTrait;
 
     /**
      * @inheritdoc
      */
-    public function up() {
+    public function up()
+    {
         $this->createTable($this->getCountryTableName(), [
             'id' => Schema::TYPE_PK,
             'name' => Schema::TYPE_STRING . ' NOT NULL',
@@ -49,7 +49,7 @@ class m150910_235325_location_module_tables extends Migration {
             'updated_by' => Schema::TYPE_INTEGER
         ]);
         $this->addForeignKey(
-                $this->getForeignKeyRegion(), $this->getRegionTableName(), 'country_id', $this->getCountryTableName(), 'id', 'CASCADE', 'CASCADE'
+                $this->getForeignKeyRegionCountry(), $this->getRegionTableName(), 'country_id', $this->getCountryTableName(), 'id', 'CASCADE', 'CASCADE'
         );
         $this->createTable($this->getCityTableName(), [
             'id' => Schema::TYPE_PK,
@@ -61,7 +61,7 @@ class m150910_235325_location_module_tables extends Migration {
             'updated_by' => Schema::TYPE_INTEGER
         ]);
         $this->addForeignKey(
-                $this->getForeignKeyCity(), $this->getCityTableName(), 'region_id', $this->getRegionTableName(), 'id', 'CASCADE', 'CASCADE'
+                $this->getForeignKeyCityRegion(), $this->getCityTableName(), 'region_id', $this->getRegionTableName(), 'id', 'CASCADE', 'CASCADE'
         );
 
         $this->createTable($this->getLocationTableName(), [
@@ -88,9 +88,10 @@ class m150910_235325_location_module_tables extends Migration {
     /**
      * @inheritdoc
      */
-    public function down() {
-        $this->dropForeignKey($this->getForeignKeyCity(), $this->getCityTableName());
-        $this->dropForeignKey($this->getForeignKeyRegion(), $this->getRegionTableName());
+    public function down()
+    {
+        $this->dropForeignKey($this->getForeignKeyCityRegion(), $this->getCityTableName());
+        $this->dropForeignKey($this->getForeignKeyRegionCountry(), $this->getRegionTableName());
         $this->dropForeignKey($this->getForeignKeyLocCity(), $this->getLocationTableName());
         $this->dropForeignKey($this->getForeignKeyLocRegion(), $this->getLocationTableName());
         $this->dropForeignKey($this->getForeignKeyLocCountry(), $this->getLocationTableName());
@@ -99,96 +100,6 @@ class m150910_235325_location_module_tables extends Migration {
         $this->dropTable($this->getRegionTableName());
         $this->dropTable($this->getCountryTableName());
         $this->dropTable($this->getLocationTableName());
-    }
-
-    /**
-     * Returns the table name of the Country model. You can override this 
-     * method in order to provide a custom table name.
-     * 
-     * @return string
-     */
-    protected function getCountryTableName() {
-        return Country::tableName();
-    }
-
-    /**
-     * Returns the table name of the Region model. You can override this 
-     * method in order to provide a custom table name.
-     * 
-     * @return string
-     */
-    protected function getRegionTableName() {
-        return Region::tableName();
-    }
-
-    /**
-     * Returns the table name of the City model. You can override this 
-     * method in order to provide a custom table name.
-     * 
-     * @return string
-     */
-    protected function getCityTableName() {
-        return City::tableName();
-    }
-
-    /**
-     * Returns the table name of the Location model. You can override this 
-     * method in order to provide a custom table name.
-     * 
-     * @return string
-     */
-    protected function getLocationTableName() {
-        return Location::tableName();
-    }
-
-    /**
-     * Returns the foreign key name of the Region model. You can override this 
-     * method in order to provide a custom foreign key name.
-     * 
-     * @return string
-     */
-    protected function getForeignKeyRegion() {
-        return 'FK_' . Inflector::camelize($this->getRegionTableName()) . '_CountryId';
-    }
-
-    /**
-     * Returns the foreign key name of the City model. You can override this 
-     * method in order to provide a custom foreign key name.
-     * 
-     * @return string
-     */
-    protected function getForeignKeyCity() {
-        return 'FK_' . Inflector::camelize($this->getCityTableName()) . '_RegionId';
-    }
-
-    /**
-     * Returns the foreign key name of the Country model for country_id. You can 
-     * override this method in order to provide a custom foreign key name.
-     * 
-     * @return string
-     */
-    protected function getForeignKeyLocCountry() {
-        return 'FK_' . Inflector::camelize($this->getLocationTableName()) . '_CountryId';
-    }
-
-    /**
-     * Returns the foreign key name of the Location model for region_id. You can 
-     * override this method in order to provide a custom foreign key name.
-     * 
-     * @return string
-     */
-    protected function getForeignKeyLocRegion() {
-        return 'FK_' . Inflector::camelize($this->getLocationTableName()) . '_RegionId';
-    }
-
-    /**
-     * Returns the foreign key name of the Location model for city_id. You can 
-     * override this method in order to provide a custom foreign key name.
-     * 
-     * @return string
-     */
-    protected function getForeignKeyLocCity() {
-        return 'FK_' . Inflector::camelize($this->getLocationTableName()) . '_CityId';
     }
 
 }

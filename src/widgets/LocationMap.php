@@ -19,7 +19,8 @@ use yii\helpers\Html;
  * 
  * @author José Lorente <jose.lorente.martin@gmail.com>
  */
-class LocationMap extends Widget {
+class LocationMap extends Widget
+{
 
     /**
      *
@@ -42,7 +43,8 @@ class LocationMap extends Widget {
     /**
      * @inheritdoc
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->mapOptions = array_merge([
@@ -56,15 +58,16 @@ class LocationMap extends Widget {
     /**
      * @inheritdoc
      */
-    public function run() {
+    public function run()
+    {
         $coord = new LatLng([
             'lat' => $this->model->latitude,
             'lng' => $this->model->longitude
         ]);
         $this->mapOptions['center'] = $coord;
-        $map = new Map($this->mapOptions);        
+        $map = new Map($this->mapOptions);
         $marker = new Marker(array_merge($this->markerOptions, [
-            'position' => $coord
+                    'position' => $coord
         ]));
         $map->addOverlay($marker);
         echo Html::tag('div', $map->display(), ['class' => 'map-canvas']);
@@ -74,7 +77,8 @@ class LocationMap extends Widget {
      * 
      * @param LocationInterface $model
      */
-    public function setModel(LocationInterface $model) {
+    public function setModel(LocationInterface $model)
+    {
         $this->model = $model;
     }
 
@@ -82,7 +86,8 @@ class LocationMap extends Widget {
      * 
      * @return LocationInterface
      */
-    public function getModel() {
+    public function getModel()
+    {
         return $this->model;
     }
 

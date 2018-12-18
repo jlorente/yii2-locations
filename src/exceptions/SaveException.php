@@ -17,7 +17,8 @@ use yii\helpers\Json;
  * 
  * @author José Lorente <jose.lorente.martin@gmail.com>
  */
-class SaveException extends \yii\base\Exception {
+class SaveException extends \yii\base\Exception
+{
 
     /**
      * Constructor of the exception.
@@ -25,7 +26,8 @@ class SaveException extends \yii\base\Exception {
      * @param Model $model
      * @param \Exception $previous
      */
-    public function __construct(Model $model, \Exception $previous = null) {
+    public function __construct(Model $model, \Exception $previous = null)
+    {
         $message = 'Unable to save ' . get_class($model) . '. Errors: [' . Json::encode($model->getErrors()) . ']';
         parent::__construct($message, 1100, $previous);
     }
@@ -33,7 +35,8 @@ class SaveException extends \yii\base\Exception {
     /**
      * @inheritdoc
      */
-    public function getName() {
+    public function getName()
+    {
         return 'SaveException';
     }
 

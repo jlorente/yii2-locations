@@ -19,12 +19,14 @@ use jlorente\location\db\Country;
  * 
  * @author José Lorente <jose.lorente.martin@gmail.com>
  */
-class SearchCountry extends Country {
+class SearchCountry extends Country
+{
 
     /**
      * @inheritdoc
      */
-    public function rules() {
+    public function rules()
+    {
         return [
             [['id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['name'], 'safe'],
@@ -34,7 +36,8 @@ class SearchCountry extends Country {
     /**
      * @inheritdoc
      */
-    public function scenarios() {
+    public function scenarios()
+    {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
@@ -45,7 +48,8 @@ class SearchCountry extends Country {
      * @param array $params
      * @return ActiveDataProvider
      */
-    public function search($params) {
+    public function search($params)
+    {
         $query = Country::find();
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

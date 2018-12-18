@@ -20,6 +20,7 @@ use yii\db\ActiveRecord as BaseActiveRecord;
  *
  * @property integer $id
  * @property integer $country_id
+ * @property integer $state_id
  * @property integer $region_id
  * @property integer $city_id
  * @property string $address
@@ -27,8 +28,9 @@ use yii\db\ActiveRecord as BaseActiveRecord;
  * @property double $longitude
  * 
  * @property City $city The city in which this location is located or null if not defined.
- * @property Region $region The region in which this location is located or null if not defined.
  * @property Country $county The country in which this zone is located or null if not defined.
+ * @property Region $region The region in which this location is located or null if not defined.
+ * @property State $state The state in which this zone is located or null if not defined.
  * 
  * @author José Lorente <jose.lorente.martin@gmail.com>
  */
@@ -49,9 +51,9 @@ class Location extends BaseActiveRecord implements LocationInterface
     public function rules()
     {
         return [
-            [['country_id', 'region_id', 'city_id'], 'integer'],
-            [['latitude', 'longitude'], 'number'],
-            [['address', 'postal_code'], 'string', 'max' => 255]
+            [['country_id', 'region_id', 'city_id', 'state_id'], 'integer']
+            , [['latitude', 'longitude'], 'number']
+            , [['address', 'postal_code'], 'string', 'max' => 255]
         ];
     }
 
@@ -61,24 +63,16 @@ class Location extends BaseActiveRecord implements LocationInterface
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('jlorente/location', 'ID'),
-            'country_id' => Yii::t('jlorente/location', 'Country'),
-            'region_id' => Yii::t('jlorente/location', 'Region'),
-            'city_id' => Yii::t('jlorente/location', 'City'),
-            'address' => Yii::t('jlorente/location', 'Address'),
-            'postal_code' => Yii::t('jlorente/location', 'Postal Code'),
-            'latitude' => Yii::t('jlorente/location', 'Latitude'),
-            'longitude' => Yii::t('jlorente/location', 'Longitude'),
+            'id' => Yii::t('jlorente/location', 'ID')
+            , 'country_id' => Yii::t('jlorente/location', 'Country')
+            , 'region_id' => Yii::t('jlorente/location', 'Region')
+            , 'city_id' => Yii::t('jlorente/location', 'City')
+            , 'state_id' => Yii::t('jlorente/location', 'State')
+            , 'address' => Yii::t('jlorente/location', 'Address')
+            , 'postal_code' => Yii::t('jlorente/location', 'Postal Code')
+            , 'latitude' => Yii::t('jlorente/location', 'Latitude')
+            , 'longitude' => Yii::t('jlorente/location', 'Longitude')
         ];
-    }
-
-    /**
-     * 
-     * @return yii\db\ActiveQuery
-     */
-    public function getRegion()
-    {
-        return $this->hasOne(Region::className(), ['id' => 'region_id']);
     }
 
     /**
@@ -97,6 +91,24 @@ class Location extends BaseActiveRecord implements LocationInterface
     public function getCountry()
     {
         return $this->hasOne(Country::className(), ['id' => 'country_id']);
+    }
+
+    /**
+     * 
+     * @return yii\db\ActiveQuery
+     */
+    public function getRegion()
+    {
+        return $this->hasOne(Region::className(), ['id' => 'region_id']);
+    }
+
+    /**
+     * 
+     * @return yii\db\ActiveQuery
+     */
+    public function getState()
+    {
+        return $this->hasOne(State::className(), ['id' => 'state_id']);
     }
 
     /**
@@ -153,6 +165,7 @@ class Location extends BaseActiveRecord implements LocationInterface
             'country' => 'country'
             , 'region' => 'region'
             , 'city' => 'city'
+            , 'state' => 'state'
         ]);
     }
 
@@ -175,14 +188,6 @@ class Location extends BaseActiveRecord implements LocationInterface
     /**
      * @inheritdoc
      */
-    public function getCountryPropertyName()
-    {
-        return 'country_id';
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getCityPropertyName()
     {
         return 'city_id';
@@ -191,9 +196,25 @@ class Location extends BaseActiveRecord implements LocationInterface
     /**
      * @inheritdoc
      */
+    public function getCountryPropertyName()
+    {
+        return 'country_id';
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getRegionPropertyName()
     {
         return 'region_id';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getStatePropertyName()
+    {
+        return 'state_id';
     }
 
 }

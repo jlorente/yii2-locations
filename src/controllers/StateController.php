@@ -9,31 +9,31 @@
 
 namespace jlorente\location\controllers;
 
+use jlorente\location\db\State;
+use jlorente\location\models\SearchState;
 use Yii;
-use jlorente\location\models\SearchCity;
-use jlorente\location\db\City;
+use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
-use yii\helpers\ArrayHelper;
 
 /**
- * CityController implements the CRUD actions for City model.
+ * StateController implements the CRUD actions for State model.
  * 
  * @author José Lorente <jose.lorente.martin@gmail.com>
  */
-class CityController extends CrudController
+class StateController extends CrudController
 {
 
     use LocationControllerTrait;
 
     /**
-     * Lists all City models.
+     * Lists all State models.
      * 
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new SearchCity(Yii::$app->request->get());
+        $searchModel = new SearchState(Yii::$app->request->get());
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -43,7 +43,7 @@ class CityController extends CrudController
     }
 
     /**
-     * Displays a single City model.
+     * Displays a single State model.
      * 
      * @param integer $id
      * @return mixed
@@ -56,25 +56,25 @@ class CityController extends CrudController
     }
 
     /**
-     * Creates a new City model.
+     * Creates a new State model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * 
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new City(Yii::$app->request->get());
+        $model = new State(Yii::$app->request->get());
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
-                        'model' => $model
+                        'model' => $model,
             ]);
         }
     }
 
     /**
-     * Updates an existing City model.
+     * Updates an existing State model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * 
      * @param integer $id
@@ -83,6 +83,7 @@ class CityController extends CrudController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -93,7 +94,7 @@ class CityController extends CrudController
     }
 
     /**
-     * Deletes an existing City model.
+     * Deletes an existing State model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * 
      * @param integer $id
@@ -107,16 +108,16 @@ class CityController extends CrudController
     }
 
     /**
-     * Finds the City model based on its primary key value.
+     * Finds the State model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * 
      * @param integer $id
-     * @return City the loaded model
+     * @return State the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = City::findOne($id)) !== null) {
+        if (($model = State::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
@@ -135,7 +136,7 @@ class CityController extends CrudController
         if (empty($parent[0])) {
             $output = [];
         } else {
-            $searchModel = new SearchCity($parent);
+            $searchModel = new SearchState($parent);
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
             $dataProvider->setPagination(false);
             $dataProvider->getSort()->defaultOrder = ['name' => SORT_ASC];

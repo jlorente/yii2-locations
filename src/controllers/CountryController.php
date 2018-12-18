@@ -21,14 +21,16 @@ use yii\helpers\ArrayHelper;
  * 
  * @author José Lorente <jose.lorente.martin@gmail.com>
  */
-class CountryController extends CrudController {
+class CountryController extends CrudController
+{
 
     /**
      * Lists all Country models.
      * 
      * @return mixed
      */
-    public function actionIndex() {
+    public function actionIndex()
+    {
         $searchModel = new SearchCountry();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -44,7 +46,8 @@ class CountryController extends CrudController {
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id) {
+    public function actionView($id)
+    {
         return $this->render('view', [
                     'model' => $this->findModel($id),
         ]);
@@ -56,7 +59,8 @@ class CountryController extends CrudController {
      * 
      * @return mixed
      */
-    public function actionCreate() {
+    public function actionCreate()
+    {
         $model = new Country();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -75,7 +79,8 @@ class CountryController extends CrudController {
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id) {
+    public function actionUpdate($id)
+    {
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -94,7 +99,8 @@ class CountryController extends CrudController {
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id) {
+    public function actionDelete($id)
+    {
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
@@ -108,7 +114,8 @@ class CountryController extends CrudController {
      * @return Country the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id) {
+    protected function findModel($id)
+    {
         if (($model = Country::findOne($id)) !== null) {
             return $model;
         } else {
@@ -121,7 +128,8 @@ class CountryController extends CrudController {
      * 
      * @return array
      */
-    public function actionList() {
+    public function actionList()
+    {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $searchModel = new SearchCountry();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);

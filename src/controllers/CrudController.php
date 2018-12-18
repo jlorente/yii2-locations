@@ -21,12 +21,14 @@ use yii\filters\ContentNegotiator;
  * 
  * @author José Lorente <jose.lorente.martin@gmail.com>
  */
-class CrudController extends Controller {
+class CrudController extends Controller
+{
 
     /**
      * @inheritdoc
      */
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
             'access' => [
                 'class' => AccessControl::className(),

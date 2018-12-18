@@ -12,20 +12,20 @@ namespace jlorente\location\db;
 use Yii;
 
 /**
- * This is the model class for table "jl_loc_city".
+ * This is the model class for table "jl_loc_state".
  *
  * @property integer $id
- * @property integer $region_id
+ * @property integer $country_id
  * @property string $name
  * 
- * @property Country $country The country in which this city is located.
+ * @property City[] $cities A collection of City objects.
+ * @property Country $country The country in which this region is located.
  * @property Location[] $locations A collection of Location objects.
- * @property Region $region The region in which this city is located.
- * @property State $state The state in which this city is located.
+ * @property Region[] $regions A collection of Region objects.
  * 
  * @author José Lorente <jose.lorente.martin@gmail.com>
  */
-class City extends ActiveRecord
+class State extends ActiveRecord
 {
 
     /**
@@ -33,7 +33,7 @@ class City extends ActiveRecord
      */
     public static function tableName()
     {
-        return 'jl_loc_city';
+        return 'jl_loc_state';
     }
 
     /**
@@ -42,16 +42,10 @@ class City extends ActiveRecord
     public function rules()
     {
         return array_merge(parent::rules(), [
-            ['name', 'required']
-            , [['country_id', 'region_id', 'state_id'], 'one_required', ['country_id', 'region_id', 'state_id']]
-            , [['country_id', 'region_id', 'state_id'], 'integer']
+            [['country_id', 'name'], 'required']
+            , [['country_id'], 'integer']
             , [['name'], 'string', 'max' => 255]
         ]);
-    }
-
-    public function validate()
-    {
-        
     }
 
     /**
@@ -61,11 +55,20 @@ class City extends ActiveRecord
     {
         return array_merge(parent::attributeLabels(), [
             'id' => Yii::t('jlorente/location', 'ID')
-            , 'region_id' => Yii::t('jlorente/location', 'Region')
-            , 'state_id' => Yii::t('jlorente/location', 'State')
             , 'country_id' => Yii::t('jlorente/location', 'Country')
+            , 'cities' => Yii::t('jlorente/location', 'Cities')
+            , 'regions' => Yii::t('jlorente/location', 'Regions')
             , 'name' => Yii::t('jlorente/location', 'Name')
         ]);
+    }
+
+    /**
+     * 
+     * @return yii\db\ActiveQuery
+     */
+    public function getCities()
+    {
+        return $this->hasMany(City::className(), ['state_id' => 'id']);
     }
 
     /**
@@ -83,25 +86,16 @@ class City extends ActiveRecord
      */
     public function getLocations()
     {
-        return $this->hasMany(Location::className(), ['city_id' => 'id']);
+        return $this->hasMany(Location::className(), ['region_id' => 'id']);
     }
 
     /**
      * 
      * @return yii\db\ActiveQuery
      */
-    public function getRegion()
+    public function getRegions()
     {
-        return $this->hasOne(Region::className(), ['id' => 'region_id']);
-    }
-
-    /**
-     * 
-     * @return yii\db\ActiveQuery
-     */
-    public function getState()
-    {
-        return $this->hasOne(State::className(), ['id' => 'state_id']);
+        return $this->hasMany(Region::className(), ['state_id' => 'id']);
     }
 
 }

@@ -16,9 +16,11 @@ use yii\grid\ActionColumn;
 
 $this->title = Yii::t('jlorente/location', 'Cities');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('jlorente/location', 'Countries'), 'url' => ['country/index']];
-$this->params['breadcrumbs'][] = ['label' => $searchModel->region->country->name, 'url' => ['country/view', 'id' => $searchModel->region->country_id]];
-$this->params['breadcrumbs'][] = ['label' => Yii::t('jlorente/location', 'Regions'), 'url' => ['region/index', 'countryId' => $searchModel->region->country_id]];
-$this->params['breadcrumbs'][] = ['label' => $searchModel->region->name, 'url' => ['region/view', 'id' => $searchModel->region_id]];
+$this->params['breadcrumbs'][] = ['label' => $searchModel->region->state->country->name, 'url' => ['country/view', 'id' => $searchModel->region->state->country_id]];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('jlorente/location', 'States'), 'url' => ['state/index', 'country_id' => $searchModel->region->state->country_id]];
+$this->params['breadcrumbs'][] = ['label' => $searchModel->region->state->name, 'url' => ['state/view', 'id' => $searchModel->region->state_id]];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('jlorente/location', 'Regions'), 'url' => ['index', 'country_id' => $searchModel->region->state->country_id, 'state_id' => $searchModel->region->state_id]];
+$this->params['breadcrumbs'][] = ['label' => $searchModel->region->name, 'url' => ['view', 'id' => $searchModel->region_id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="city-index">
@@ -28,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?=
         Html::a(Yii::t('jlorente/location', 'Create {modelClass}', [
                     'modelClass' => Yii::t('jlorente/location', 'Place')
-                ]), ['create', 'regionId' => $searchModel->region_id], [
+                ]), ['create', 'country_id' => $searchModel->region->state->country_id, 'state_id' => $searchModel->region->state_id, 'region_id' => $searchModel->region_id], [
             'class' => 'btn btn-success'
         ])
         ?>

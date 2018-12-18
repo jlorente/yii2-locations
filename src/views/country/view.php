@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ])
         ?>
         <?=
-        Html::a(Yii::t('jlorente/location', 'Regions'), ['region/index', 'countryId' => $model->id], [
+        Html::a(Yii::t('jlorente/location', 'Regions'), ['region/index', 'country_id' => $model->id], [
             'class' => 'btn btn-info pull-right',
         ])
         ?>

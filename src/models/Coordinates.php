@@ -21,7 +21,8 @@ use yii\base\InvalidConfigException,
  * 
  * @author José Lorente <jose.lorente.martin@gmail.com>
  */
-class Coordinates extends Model {
+class Coordinates extends Model
+{
 
     /**
      *
@@ -44,7 +45,8 @@ class Coordinates extends Model {
     /**
      * @inheritdoc
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         if (empty($this->apiServerKey)) {
@@ -61,7 +63,8 @@ class Coordinates extends Model {
      * @return boolean
      * @throws GeocodingApiException
      */
-    public function apiCall($address, $regionCode) {
+    public function apiCall($address, $regionCode)
+    {
         $result = (new GeocodingClient())->lookup([
             'key' => $this->apiServerKey,
             'address' => $address,
@@ -95,7 +98,8 @@ class Coordinates extends Model {
      * 
      * @param string $key
      */
-    public function setApiServerKey($key) {
+    public function setApiServerKey($key)
+    {
         if (is_string($key)) {
             throw new InvalidParamException("Google api key must be a string value");
         }

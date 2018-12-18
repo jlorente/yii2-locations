@@ -23,12 +23,14 @@ use yii\behaviors\TimestampBehavior,
  * 
  * @author José Lorente <jose.lorente.martin@gmail.com>
  */
-abstract class ActiveRecord extends BaseActiveRecord {
+abstract class ActiveRecord extends BaseActiveRecord
+{
 
     /**
      * @inheritdoc
      */
-    public function behaviors() {
+    public function behaviors()
+    {
         return array_merge(parent::behaviors(), [
             TimestampBehavior::className(),
             BlameableBehavior::className()
@@ -36,9 +38,33 @@ abstract class ActiveRecord extends BaseActiveRecord {
     }
 
     /**
+     * 
+     * @param string $attribute
+     * @param array $params
+     * @param Validator $validator
+     * @return boolean
+     */
+    public function one_required($attribute, $params, $validator)
+    {
+        $required = current((array) $params);
+        $value = $this->$attribute;
+        if ($value) {
+            return true;
+        }
+        foreach ($required as $rAttribute) {
+            if ($this->$rAttribute) {
+                return true;
+            }
+        }
+        $this->addError($attribute, 'One of the attributes [' . implode(',', $required) . '] must not be null.');
+        return false;
+    }
+
+    /**
      * @inheritdoc
      */
-    public function rules() {
+    public function rules()
+    {
         return [
             [['created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
         ];
@@ -47,7 +73,8 @@ abstract class ActiveRecord extends BaseActiveRecord {
     /**
      * @inheritdoc
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'created_at' => Yii::t('jlorente/location', 'Created At'),
             'created_by' => Yii::t('jlorente/location', 'Created By'),
