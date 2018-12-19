@@ -78,6 +78,8 @@ class CrudController extends Controller
         foreach ($parents as $key => $parent) {
             if (is_numeric($parent)) {
                 $filteredParents[$key] = $parent;
+            } else {
+                return [];
             }
         }
         return $filteredParents;
