@@ -71,6 +71,7 @@ class Module extends BaseModule implements BootstrapInterface
         $app->getUrlManager()->addRules([
             //TypeController
             'location/country/list' => 'location/country/list'
+            , 'location/state/list' => 'location/state/list'
             , 'location/region/list' => 'location/region/list'
             , 'location/city/list' => 'location/city/list'
                 ], false);

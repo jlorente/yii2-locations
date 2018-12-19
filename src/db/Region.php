@@ -43,7 +43,7 @@ class Region extends ActiveRecord
     {
         return array_merge(parent::rules(), [
             ['name', 'required']
-            , [['country_id', 'state_id'], 'one_required', ['country_id', 'state_id']]
+            , [['country_id', 'state_id'], 'one_required', 'params' => ['country_id', 'state_id']]
             , [['country_id', 'state_id'], 'integer']
             , [['name'], 'string', 'max' => 255]
         ]);

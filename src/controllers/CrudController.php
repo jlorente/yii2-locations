@@ -9,12 +9,12 @@
 
 namespace jlorente\location\controllers;
 
+use Yii;
+use yii\filters\AccessControl;
+use yii\filters\ContentNegotiator;
+use yii\filters\VerbFilter;
 use yii\web\Response;
 use yii\web\Controller;
-use yii\filters\VerbFilter,
-    yii\filters\AccessControl;
-use jlorente\location\Module;
-use yii\filters\ContentNegotiator;
 
 /**
  * Base controller class for all the backend module controllers.
@@ -64,6 +64,23 @@ class CrudController extends Controller
                 ]
             ]
         ];
+    }
+
+    /**
+     * Get a filtered array of valid values set by depdrop.
+     * 
+     * @return array
+     */
+    protected function getDepDropParents($post = 'depdrop_parents')
+    {
+        $parents = Yii::$app->request->post($post);
+        $filteredParents = [];
+        foreach ($parents as $key => $parent) {
+            if (is_numeric($parent)) {
+                $filteredParents[$key] = $parent;
+            }
+        }
+        return $filteredParents;
     }
 
 }

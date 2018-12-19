@@ -34,7 +34,6 @@ class m181218_192325_location_module_tables extends Migration
             'id' => Schema::TYPE_PK,
             'country_id' => Schema::TYPE_INTEGER . ' NOT NULL',
             'name' => Schema::TYPE_STRING . ' NOT NULL',
-            'code' => Schema::TYPE_STRING . ' NOT NULL',
             'created_at' => Schema::TYPE_INTEGER,
             'created_by' => Schema::TYPE_INTEGER,
             'updated_at' => Schema::TYPE_INTEGER,

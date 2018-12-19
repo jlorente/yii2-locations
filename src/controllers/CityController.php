@@ -131,11 +131,17 @@ class CityController extends CrudController
     public function actionList()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $parent = Yii::$app->request->post('depdrop_parents');
-        if (empty($parent[0])) {
+        $parents = $this->getDepDropParents();
+        if (count($parents) < 2) {
             $output = [];
         } else {
-            $searchModel = new SearchCity($parent);
+            $searchParents = ['country_id' => $parents[0]];
+            if (isset($parents[1])) {
+                $searchParents['state_id'] = $parents[1];
+            } elseif (isset($parents[2])) {
+                $searchParents['region_id'] = $parents[2];
+            }
+            $searchModel = new SearchCity($searchParents);
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
             $dataProvider->setPagination(false);
             $dataProvider->getSort()->defaultOrder = ['name' => SORT_ASC];

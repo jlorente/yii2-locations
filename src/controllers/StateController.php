@@ -132,11 +132,11 @@ class StateController extends CrudController
     public function actionList()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $parent = Yii::$app->request->post('depdrop_parents');
-        if (empty($parent[0])) {
+        $parents = $this->getDepDropParents();
+        if (empty($parents[0])) {
             $output = [];
         } else {
-            $searchModel = new SearchState($parent);
+            $searchModel = new SearchState(['country_id' => $parents[0]]);
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
             $dataProvider->setPagination(false);
             $dataProvider->getSort()->defaultOrder = ['name' => SORT_ASC];

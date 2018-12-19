@@ -9,23 +9,24 @@
 
 namespace jlorente\location\widgets;
 
-use Yii;
-use yii\base\Widget;
-use jlorente\location\db\LocationInterface,
-    jlorente\location\db\Country,
-    jlorente\location\db\Region,
-    jlorente\location\db\City;
-use yii\helpers\ArrayHelper,
-    yii\helpers\Url,
-    yii\helpers\Html;
-use kartik\depdrop\DepDrop;
-use yii\widgets\ActiveForm;
-use yii\base\InvalidConfigException;
+use jlorente\location\db\City;
+use jlorente\location\db\Country;
+use jlorente\location\db\LocationInterface;
+use jlorente\location\db\Region;
+use jlorente\location\db\State;
 use jlorente\location\Module;
+use kartik\depdrop\DepDrop;
+use Yii;
+use yii\base\InvalidConfigException;
+use yii\base\Widget;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
 use yii\helpers\Inflector;
+use yii\helpers\Url;
+use yii\widgets\ActiveForm;
 
 /**
- * 
+ * LocationFormWidget widget.
  * 
  * @author José Lorente <jose.lorente.martin@gmail.com>
  */
@@ -36,7 +37,7 @@ class LocationFormWidget extends Widget
      *
      * @var array
      */
-    protected $parts;
+    protected $parts = [];
 
     /**
      *
@@ -80,7 +81,6 @@ class LocationFormWidget extends Widget
      * @var array
      */
     protected $fieldIds = [];
-    protected $parts = [];
 
     /**
      * @inheritdoc
@@ -136,7 +136,7 @@ class LocationFormWidget extends Widget
      */
     protected function country()
     {
-        $this->parts['{country}'] = $this->form->field($this->model, $this->model->getCountryPropertyName(), ['options' => ['name' => 'hola']])->dropDownList(
+        $this->parts['{country}'] = $this->form->field($this->model, $this->model->getCountryPropertyName(), ['options' => ['class' => 'form-group']])->dropDownList(
                 ArrayHelper::map(Country::find()->orderBy(['name' => SORT_ASC])->all(), 'id', 'name'), [
             'id' => $this->fieldIds['country']
             , 'prompt' => Yii::t('jlorente/location', 'Select country')

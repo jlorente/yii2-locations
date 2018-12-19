@@ -43,15 +43,10 @@ class City extends ActiveRecord
     {
         return array_merge(parent::rules(), [
             ['name', 'required']
-            , [['country_id', 'region_id', 'state_id'], 'one_required', ['country_id', 'region_id', 'state_id']]
+            , [['country_id', 'region_id', 'state_id'], 'one_required', 'params' => ['country_id', 'region_id', 'state_id']]
             , [['country_id', 'region_id', 'state_id'], 'integer']
             , [['name'], 'string', 'max' => 255]
         ]);
-    }
-
-    public function validate()
-    {
-        
     }
 
     /**

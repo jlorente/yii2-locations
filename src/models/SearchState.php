@@ -50,7 +50,7 @@ class SearchState extends State
      */
     public function search($params)
     {
-        $query = Region::find();
+        $query = State::find();
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
