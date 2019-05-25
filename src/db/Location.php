@@ -143,15 +143,18 @@ class Location extends BaseActiveRecord implements LocationInterface
      */
     public function getLocationString()
     {
-        $normalized = '';
+        $normalized = $sep = '';
+        if ($this->postal_code !== null) {
+            $normalized .= $sep . $this->postal_code;
+            $sep = ' ';
+        }
         if ($this->city !== null) {
-            $normalized .= $this->city->name;
+            $normalized .= $sep . $this->city->name;
+            $sep = ' ';
         }
         if ($this->region !== null) {
-            $normalized .= ' ' . $this->region->name;
-        }
-        if ($this->postal_code !== null) {
-            $normalized .= ' ' . $this->postal_code;
+            $normalized .= $sep . $this->region->name;
+            $sep = ' ';
         }
         return $normalized;
     }
