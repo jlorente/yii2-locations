@@ -138,7 +138,8 @@ class CityController extends CrudController
             $searchParents = ['country_id' => $parents[0]];
             if (isset($parents[1])) {
                 $searchParents['state_id'] = $parents[1];
-            } elseif (isset($parents[2])) {
+            }
+            if (isset($parents[2])) {
                 $searchParents['region_id'] = $parents[2];
             }
             $searchModel = new SearchCity($searchParents);

@@ -175,8 +175,10 @@ class LocationFormWidget extends Widget
         if (isset($this->fieldIds['state'])) {
             $pluginOptions['depends'][] = $this->fieldIds['state'];
             $pluginOptions['initDepends'] = [$this->fieldIds['country']];
+            $regionFilter = ['state_id' => $this->model->state_id];
         } else {
             $pluginOptions['depends'][] = null;
+            $regionFilter = ['country_id' => $this->model->country_id];
         }
 
         $this->parts['{region}'] = $this->form->field($this->model, $this->model->getRegionPropertyName())->widget(DepDrop::className(), [
@@ -185,7 +187,7 @@ class LocationFormWidget extends Widget
                 , 'placeholder' => Yii::t('jlorente/location', 'Select region')
                 , 'name' => $this->getSubmitModelName($this->model->getRegionPropertyName())
             ]
-            , 'data' => ArrayHelper::map(Region::find()->where(['country_id' => $this->model->country_id])->orderBy(['name' => SORT_ASC])->all(), 'id', 'name')
+            , 'data' => ArrayHelper::map(Region::find()->where($regionFilter)->orderBy(['name' => SORT_ASC])->all(), 'id', 'name')
             , 'pluginOptions' => $pluginOptions
         ]);
     }
