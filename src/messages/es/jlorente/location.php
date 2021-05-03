@@ -19,6 +19,7 @@ return [
     'Country' => 'País',
     'Countries' => 'Paises',
     'Select country' => 'Selecciona un país',
+    'Select state' => 'Selecciona comunidad',
     'Region' => 'Provincia',
     'Regions' => 'Provincias',
     'Select region' => 'Selecciona una provincia',
